@@ -1,0 +1,26 @@
+services:
+  wallet-lens:
+    build:
+      context: .
+    image: wallet-lens:latest
+    container_name: wallet-lens
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+      SOLANA_RPC_URL: "${SOLANA_RPC_URL:-https://api.mainnet-beta.solana.com}"
+      RATE_LIMIT_PER_MINUTE: "${RATE_LIMIT_PER_MINUTE:-30}"
+      SNAPSHOT_FILE: /app/data/snapshots.json
+    ports:
+      - "127.0.0.1:3200:3000"
+    volumes:
+      - wallet_lens_data:/app/data
+    networks:
+      - stack
+
+volumes:
+  wallet_lens_data:
+
+networks:
+  stack:
+    external: true
+    name: stack_stack
